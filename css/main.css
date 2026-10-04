@@ -1,0 +1,671 @@
+/* ==========================================================================
+   main.css — zero-dependency digital garden
+   Structure: tokens → reset → layout → header → hero → sections → cards →
+              posts → footer → utilities
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens
+   Default follows the OS (works with JS disabled). A pinned choice from the
+   toggle adds .theme-light / .theme-dark to <html> and overrides the system.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Type */
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* Layout */
+  --measure: 62ch;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --max: 68rem;
+  --header-h: 3.5rem;
+  --bw: 1px;
+
+  /* Color — light (default) */
+  --bg: #f6f5f1;
+  --fg: #0e0e0c;
+  --muted: #55534d;
+  --line: #cfccc3;
+  --accent: #b3300a;
+  --spot: rgba(179, 48, 10, 0.09);
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1); /* decelerate, no overshoot */
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.theme-light):not(.theme-dark) {
+    --bg: #0b0b0a;
+    --fg: #eceae4;
+    --muted: #a09d94;
+    --line: #2d2c29;
+    --accent: #ff8a5c;
+    --spot: rgba(255, 138, 92, 0.12);
+  }
+}
+
+:root.theme-light {
+  --bg: #f6f5f1;
+  --fg: #0e0e0c;
+  --muted: #55534d;
+  --line: #cfccc3;
+  --accent: #b3300a;
+  --spot: rgba(179, 48, 10, 0.09);
+  color-scheme: light;
+}
+
+:root.theme-dark {
+  --bg: #0b0b0a;
+  --fg: #eceae4;
+  --muted: #a09d94;
+  --line: #2d2c29;
+  --accent: #ff8a5c;
+  --spot: rgba(255, 138, 92, 0.12);
+  color-scheme: dark;
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset & base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+  accent-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, p, ul, ol, dl, dd {
+  margin: 0;
+}
+
+ul, ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Layout primitives
+   -------------------------------------------------------------------------- */
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--max));
+  margin-inline: auto;
+}
+
+.section {
+  border-top: var(--bw) solid var(--fg);
+  padding-block: clamp(3rem, 8vw, 6rem);
+  /* Skip rendering work for off-screen sections */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 40rem;
+}
+
+.section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+
+.section__idx,
+.section__meta,
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.section__idx {
+  color: var(--accent);
+}
+
+.section__title {
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.section__meta {
+  margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   4. Header / nav / theme toggle
+   -------------------------------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: 0;
+  z-index: 100;
+  padding: 0.5rem 0.75rem;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  transform: translateY(-120%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-bottom: var(--bw) solid var(--line);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  min-height: var(--header-h);
+}
+
+.brand {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.brand__cursor {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .brand__cursor {
+    animation: blink 1.1s steps(1) infinite;
+  }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.site-nav {
+  margin-inline: auto 0;
+  min-width: 0;
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
+.site-nav a {
+  display: inline-block;
+  padding-block: 0.25rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: var(--bw) solid transparent;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="location"],
+.site-nav a[aria-current="page"] {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+/* Current page: heavier than hover so the two states stay distinguishable */
+.site-nav a[aria-current="page"] {
+  font-weight: 700;
+  border-bottom-width: 2px;
+}
+
+.idx {
+  margin-right: 0.4em;
+  color: var(--accent);
+}
+
+.theme-toggle {
+  min-width: 7.25ch; /* reserve width: label swaps between "light" / "dark" */
+  padding: 0.3rem 0.6rem;
+  background: transparent;
+  color: var(--fg);
+  border: var(--bw) solid var(--fg);
+  border-radius: 0;
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.theme-toggle:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* --------------------------------------------------------------------------
+   Sub-page header (projects / blog)
+   -------------------------------------------------------------------------- */
+.page-head {
+  padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 5vw, 3.5rem);
+}
+
+.page-head__title {
+  font-size: clamp(2.25rem, 1rem + 4.2vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.page-head__lede {
+  max-width: var(--measure);
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   5. Hero / manifesto
+   -------------------------------------------------------------------------- */
+.hero {
+  padding-block: clamp(3.5rem, 10vw, 8rem) clamp(3rem, 8vw, 6rem);
+}
+
+.eyebrow {
+  margin-bottom: 1.5rem;
+}
+
+.hero__title {
+  max-width: 20ch;
+  font-size: clamp(2.25rem, 1rem + 5.2vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.hero__lede {
+  max-width: var(--measure);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  font-family: var(--mono);
+  font-size: 0.9375rem;
+}
+
+.links a {
+  display: inline-block;
+  padding-block: 0.15rem;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+  transition: color 120ms ease;
+}
+
+.links a:hover {
+  color: var(--accent);
+}
+
+/* Focus areas — fluid, media-query-free grid */
+.focus {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  margin-top: clamp(3rem, 7vw, 5rem);
+  border-top: var(--bw) solid var(--fg);
+  border-left: var(--bw) solid var(--fg);
+}
+
+.focus__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.25rem;
+  border-right: var(--bw) solid var(--fg);
+  border-bottom: var(--bw) solid var(--fg);
+}
+
+.focus dt {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.focus dd:first-of-type {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.focus__note {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   6. Projects grid + cards
+   -------------------------------------------------------------------------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.card {
+  position: relative;
+  isolation: isolate; /* contains the spotlight pseudo-element (z-index: -1) */
+  --ping-scale: 0.985;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: var(--bg);
+  border: var(--bw) solid var(--fg);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translate(-4px, -4px);
+  box-shadow: 4px 4px 0 var(--accent);
+}
+
+.card__kicker {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card__title {
+  font-family: var(--mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.card__desc {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.tags li {
+  padding: 0.1rem 0.5rem;
+  border: var(--bw) solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.card__link {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+.card__link:hover {
+  color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   7. Writing list
+   -------------------------------------------------------------------------- */
+.posts {
+  border-top: var(--bw) solid var(--line);
+}
+
+.posts li {
+  border-bottom: var(--bw) solid var(--line);
+}
+
+.post {
+  position: relative;
+  isolation: isolate; /* contains the spotlight pseudo-element (z-index: -1) */
+  --ping-scale: 0.992;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1.5rem;
+  /* inline padding gives the spotlight room; negative margin keeps text aligned to the grid */
+  padding: 1.1rem 0.75rem;
+  margin-inline: -0.75rem;
+  text-decoration: none;
+}
+
+.post__date,
+.post__kind {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.post__date {
+  flex: 0 0 6.5rem;
+}
+
+.post__title {
+  flex: 1 1 18rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  transition: transform 140ms ease, color 120ms ease;
+}
+
+.post__kind {
+  padding: 0.05rem 0.45rem;
+  border: var(--bw) solid var(--line);
+}
+
+.post:hover .post__title,
+.post:focus-visible .post__title {
+  color: var(--accent);
+  transform: translateX(6px);
+}
+
+/* --------------------------------------------------------------------------
+   8. Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+  border-top: var(--bw) solid var(--fg);
+  padding-block: 2rem 3rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+}
+
+.site-footer a:hover {
+  color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   9. Utilities
+   -------------------------------------------------------------------------- */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   10. Motion — spotlight, scroll reveal, click ping, progress, theme swap
+   Everything animated here is compositor-friendly: opacity, translate, scale,
+   transform. Spotlight position is a CSS variable on a paint-only layer.
+   -------------------------------------------------------------------------- */
+
+/* 10a. Spotlight (position fed by JS via --mx / --my on the hovered element) */
+.card::before,
+.post::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle 18rem at var(--mx, 50%) var(--my, 50%), var(--spot), transparent 70%);
+  transition: opacity 180ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover::before,
+  .post:hover::before {
+    opacity: 1;
+  }
+}
+
+/* 10b. Scroll reveal. Hidden ONLY when JS is running (html.js, set pre-paint),
+   so no-JS visitors always see content. JS adds .is-visible once, then removes
+   both hooks after the keyframe ends. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+
+.js [data-reveal]:not(.is-visible) {
+  opacity: 0;
+}
+
+.js [data-reveal].is-visible {
+  animation: reveal 560ms var(--ease-out) var(--reveal-delay, 0ms) backwards;
+}
+
+/* 10c. Click ping — JS alternates .ping-a / .ping-b so rapid clicks restart cleanly */
+@keyframes ping-a {
+  35% { scale: var(--ping-scale, 0.96); }
+}
+
+@keyframes ping-b {
+  35% { scale: var(--ping-scale, 0.96); }
+}
+
+.ping-a {
+  animation: ping-a 200ms var(--ease-out);
+}
+
+.ping-b {
+  animation: ping-b 200ms var(--ease-out);
+}
+
+/* 10d. Reading-progress bar (created by JS; transform updated once per frame) */
+.progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* 10e. Theme swap: View Transition cross-fade (progressive enhancement) */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  .js [data-reveal]:not(.is-visible) {
+    opacity: 1;
+  }
+  .card:hover,
+  .card:focus-within,
+  .post:hover .post__title {
+    transform: none;
+  }
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Current Learnings — Debojyoti Dhar</title>
+  <meta name="description"
+    content="Working notes from Debojyoti Dhar: WSL development environments, the DOM, and discrete mathematics in Java.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0b0a" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Current Learnings — Debojyoti Dhar">
+  <meta property="og:description" content="Timestamped notes from the learning trail.">
+
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0a'/%3E%3Crect x='8' y='8' width='16' height='16' fill='%23ff8a5c'/%3E%3C/svg%3E">
+
+  <!-- Pre-paint theme pin (tiny, intentionally NOT deferred): prevents a flash of the wrong theme. -->
+  <script>
+    var h = document.documentElement;
+    h.classList.add('js'); /* enables reveal-hiding CSS only when JS is available */
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') h.classList.add('theme-' + t);
+    } catch (e) { }
+  </script>
+
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/main.js" defer></script>
+</head>
+
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="brand" href="../" aria-label="Debojyoti Dhar — home">dd<span class="brand__cursor"
+          aria-hidden="true">_</span></a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="../"><span class="idx">01</span>Home</a></li>
+          <li><a href="../projects/"><span class="idx">02</span>Projects</a></li>
+          <li><a href="./" aria-current="page"><span class="idx">03</span>Blog</a></li>
+        </ul>
+      </nav>
+
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+        <span aria-hidden="true">◐</span> <span id="theme-toggle-label">dark</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="page-head" aria-labelledby="page-title">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal>/blog &mdash; newest first</p>
+        <h1 id="page-title" class="page-head__title" data-reveal>Current Learnings</h1>
+        <p class="page-head__lede" data-reveal>Short, timestamped notes on what I am studying and setting up right now.</p>
+      </div>
+    </section>
+
+    <section id="writing" class="section" aria-labelledby="writing-title">
+      <div class="wrap">
+        <h2 id="writing-title" class="vh">Entries</h2>
+
+        <ol class="posts">
+          <li>
+            <a class="post" data-reveal href="#">
+              <time class="post__date" datetime="2026-10-03">2026-10-03</time>
+              <span class="post__title">Configuring Ubuntu on WSL for local development</span>
+              <span class="post__kind">environment</span>
+            </a>
+          </li>
+          <li>
+            <a class="post" data-reveal href="#">
+              <time class="post__date" datetime="2026-09-24">2026-09-24</time>
+              <span class="post__title">Deconstructing the DOM: Why vanilla JS is faster than you think</span>
+              <span class="post__kind">web-dev</span>
+            </a>
+          </li>
+          <li>
+            <a class="post" data-reveal href="#">
+              <time class="post__date" datetime="2026-09-12">2026-09-12</time>
+              <span class="post__title">Translating discrete mathematics into Java logic</span>
+              <span class="post__kind">cs-fundamentals</span>
+            </a>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap site-footer__inner">
+      <p>&copy; 2026 Debojyoti Dhar</p>
+      <p>Zero dependencies. HTML, CSS, JS.</p>
+      <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Debojyoti Dhar — Systems &amp; AI Engineering</title>
+  <meta name="description"
+    content="Personal digital garden of Debojyoti Dhar, a computer science student and software builder focused on systems programming and applied AI. Projects, implementation notes, and research.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0b0a" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Debojyoti Dhar — Systems &amp; AI Engineering">
+  <meta property="og:description"
+    content="Projects, implementation notes, and research from a CS student building systems and AI.">
+
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0a'/%3E%3Crect x='8' y='8' width='16' height='16' fill='%23ff8a5c'/%3E%3C/svg%3E">
+
+  <!-- Pre-paint theme pin (tiny, intentionally NOT deferred): prevents a flash of the wrong theme. -->
+  <script>
+    var h = document.documentElement;
+    h.classList.add('js'); /* enables reveal-hiding CSS only when JS is available */
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') h.classList.add('theme-' + t);
+    } catch (e) { }
+  </script>
+
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/main.js" defer></script>
+</head>
+
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="brand" href="./" aria-label="Debojyoti Dhar — home">dd<span class="brand__cursor"
+          aria-hidden="true">_</span></a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="./" aria-current="page"><span class="idx">01</span>Home</a></li>
+          <li><a href="projects/"><span class="idx">02</span>Projects</a></li>
+          <li><a href="blog/"><span class="idx">03</span>Blog</a></li>
+        </ul>
+      </nav>
+
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+        <span aria-hidden="true">◐</span> <span id="theme-toggle-label">dark</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO / MANIFESTO -->
+    <section id="manifesto" class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal>Debojyoti Dhar &mdash; First-year CS undergrad at Scaler School of Technology (Class of
+          2030).</p>
+        <h1 id="hero-title" class="hero__title" data-reveal>I build systems that are fast, legible, and honest about their
+          trade-offs.</h1>
+        <p class="hero__lede" data-reveal>
+          Building a strong foundation in raw web technologies (Vanilla JS, CSS Grid) and Java.
+          This site serves as my digital footprint as I transition from learning syntax to
+          engineering actual systems. Zero dependencies, pure architecture.
+        </p>
+
+        <ul class="links" data-reveal aria-label="Elsewhere">
+          <li><a href="https://github.com/debojyotidhar-ai" target="_blank" rel="me noopener">GitHub <span
+                aria-hidden="true">↗</span></a></li>
+          <li><a href="https://www.linkedin.com/in/debojyoti-dhar/" target="_blank" rel="me noopener">LinkedIn <span
+                aria-hidden="true">↗</span></a></li>
+          <li><a href="cv.pdf">CV <span aria-hidden="true">↓</span></a></li>
+        </ul>
+
+        <dl class="focus">
+          <div class="focus__cell" data-reveal>
+            <dt>Focus / 01</dt>
+            <dd>Systems</dd>
+            <dd class="focus__note">Storage engines, concurrency, OS internals, performance work.</dd>
+          </div>
+          <div class="focus__cell" data-reveal>
+            <dt>Focus / 02</dt>
+            <dd>AI</dd>
+            <dd class="focus__note">Retrieval, inference efficiency, evaluation that actually means something.</dd>
+          </div>
+          <div class="focus__cell" data-reveal>
+            <dt>Status</dt>
+            <dd>Building</dd>
+            <dd class="focus__note">Open to internships, research collaborations, and hard problems.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- EXPLORE: previews linking to sub-pages -->
+    <section id="explore" class="section" aria-labelledby="explore-title">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <span class="section__idx">&rarr;</span>
+          <h2 id="explore-title" class="section__title">Explore</h2>
+          <span class="section__meta">2 sections</span>
+        </header>
+
+        <div class="grid">
+          <article class="card" data-reveal>
+            <p class="card__kicker">/projects</p>
+            <h3 class="card__title">Projects</h3>
+            <p class="card__desc">A zero-dependency portfolio and a hackathon form-automation extension &mdash; the
+              things I have shipped so far.</p>
+            <ul class="tags" aria-label="Contents">
+              <li>2 projects</li>
+              <li>HTML</li>
+              <li>JavaScript</li>
+            </ul>
+            <a class="card__link" href="projects/">View projects<span class="vh"> page</span> <span
+                aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card" data-reveal>
+            <p class="card__kicker">/blog</p>
+            <h3 class="card__title">Current Learnings</h3>
+            <p class="card__desc">Working notes from the learning trail: WSL environment setup, the DOM, and discrete
+              mathematics in Java.</p>
+            <ul class="tags" aria-label="Contents">
+              <li>3 notes</li>
+              <li>web-dev</li>
+              <li>cs-fundamentals</li>
+            </ul>
+            <a class="card__link" href="blog/">Read the notes<span class="vh"> on the blog page</span> <span
+                aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap site-footer__inner">
+      <p>&copy; 2026 Debojyoti Dhar</p>
+      <p>Zero dependencies. HTML, CSS, JS.</p>
+      <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </footer>
+</body>
+
+</html>
