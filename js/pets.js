@@ -1,4 +1,4 @@
-/* pets.js — original low-poly garden companions, rendered with Three.js. */
+/* pets.js — roaming Pokémon sprites, rendered with Three.js. */
 (() => {
   'use strict';
 
@@ -6,10 +6,51 @@
 
   const CDN_URL = 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
   const visitors = [
-    { name: 'Pip the sun-scout', color: 0xf6c84a, light: 0xffedac, size: 0.92, ears: 'pointed' },
-    { name: 'Moss the nap-keeper', color: 0x74a987, light: 0xc4d7a1, size: 1.08, ears: 'round' },
-    { name: 'Luma the cloud-kit', color: 0xb29add, light: 0xeee5ff, size: 0.86, ears: 'long' },
-    { name: 'Bloop the tide-drop', color: 0x65bdd0, light: 0xd4f4f2, size: 0.9, ears: 'fins' },
+    {
+      name: 'Pikachu',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png',
+      size: 0.92,
+    },
+    {
+      name: 'Gengar',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png',
+      size: 1.08,
+    },
+    {
+      name: 'Snorlax',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/143.png',
+      size: 0.86,
+    },
+    {
+      name: 'Mudkip',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/258.png',
+      size: 0.9,
+    },
+    {
+      name: 'Bulbasaur',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+      size: 0.92,
+    },
+    {
+      name: 'Charmander',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png',
+      size: 0.92,
+    },
+    {
+      name: 'Squirtle',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png',
+      size: 0.92,
+    },
+    {
+      name: 'Eevee',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png',
+      size: 0.92,
+    },
+    {
+      name: 'Mew',
+      texture: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png',
+      size: 0.92,
+    },
   ];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const container = document.createElement('div');
@@ -19,72 +60,41 @@
 
   const loadThree = () => import(CDN_URL);
 
-  const makeMaterial = (THREE, color, options = {}) => new THREE.MeshStandardMaterial({
-    color,
-    roughness: 0.82,
-    metalness: 0,
-    flatShading: true,
-    ...options,
-  });
-
-  const addMesh = (THREE, group, geometry, material, position, scale) => {
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(...position);
-    if (scale) mesh.scale.set(...scale);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    group.add(mesh);
-    return mesh;
+  const loadTextures = (THREE) => {
+    const loader = new THREE.TextureLoader();
+    return Promise.all(visitors.map(async (config) => {
+      try {
+        const texture = await loader.loadAsync(config.texture);
+        return { ...config, texture };
+      } catch (error) {
+        console.error(`The ${config.name} sprite could not be loaded.`, error);
+        return null;
+      }
+    })).then((companions) => companions.filter(Boolean));
   };
 
   const createCompanion = (THREE, config) => {
-    const group = new THREE.Group();
-    const bodyMaterial = makeMaterial(THREE, config.color);
-    const lightMaterial = makeMaterial(THREE, config.light);
-    const darkMaterial = makeMaterial(THREE, 0x292833, { roughness: 0.5 });
-    const bodyGeo = new THREE.IcosahedronGeometry(0.48, 1);
-    const headGeo = new THREE.IcosahedronGeometry(0.32, 1);
-    const limbGeo = new THREE.IcosahedronGeometry(0.17, 0);
-    const eyeGeo = new THREE.SphereGeometry(0.045, 8, 6);
-    const coneGeo = new THREE.ConeGeometry(0.13, 0.42, 5);
+    const { texture } = config;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.magFilter = THREE.NearestFilter;
+    texture.minFilter = THREE.NearestFilter;
 
-    const body = addMesh(THREE, group, bodyGeo, bodyMaterial, [0, 0.43, 0], [0.92, 1.08, 0.76]);
-    const head = addMesh(THREE, group, headGeo, bodyMaterial, [0, 0.91, 0.02], [1.02, 0.94, 0.9]);
-    addMesh(THREE, group, new THREE.IcosahedronGeometry(0.2, 0), lightMaterial, [0, 0.42, 0.365], [1.15, 0.92, 0.38]);
-
-    const eyeLeft = addMesh(THREE, group, eyeGeo, darkMaterial, [-0.12, 0.94, 0.302]);
-    const eyeRight = addMesh(THREE, group, eyeGeo, darkMaterial, [0.12, 0.94, 0.302]);
-    eyeLeft.castShadow = false;
-    eyeRight.castShadow = false;
-
-    const footLeft = addMesh(THREE, group, limbGeo, lightMaterial, [-0.24, 0.08, 0.11], [1.05, 0.68, 1.2]);
-    const footRight = addMesh(THREE, group, limbGeo, lightMaterial, [0.24, 0.08, 0.11], [1.05, 0.68, 1.2]);
-
-    const earPositions = config.ears === 'fins'
-      ? [[-0.33, 0.94, 0], [0.33, 0.94, 0]]
-      : [[-0.22, 1.15, 0], [0.22, 1.15, 0]];
-    earPositions.forEach(([x, y, z], index) => {
-      if (config.ears === 'round') {
-        addMesh(THREE, group, new THREE.IcosahedronGeometry(0.18, 0), bodyMaterial, [x, y, z], [1, 0.9, 0.8]);
-      } else {
-        const ear = addMesh(THREE, group, coneGeo, bodyMaterial,
-          [x, y, z], config.ears === 'long' ? [0.78, 1.55, 0.8] : [0.8, 0.95, 0.8]);
-        ear.rotation.z = index === 0 ? 0.28 : -0.28;
-        if (config.ears === 'fins') ear.rotation.z += index === 0 ? -0.9 : 0.9;
-      }
+    const material = new THREE.SpriteMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite: false,
     });
-
-    const armLeft = addMesh(THREE, group, limbGeo, bodyMaterial, [-0.42, 0.42, 0], [0.7, 1.1, 0.72]);
-    const armRight = addMesh(THREE, group, limbGeo, bodyMaterial, [0.42, 0.42, 0], [0.7, 1.1, 0.72]);
-    armLeft.rotation.z = -0.4;
-    armRight.rotation.z = 0.4;
-
-    group.scale.setScalar(config.size);
-    group.userData = { body, head, footLeft, footRight, armLeft, armRight };
-    return group;
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(1.15 * config.size, 1.5 * config.size, 1);
+    return sprite;
   };
 
-  const start = (THREE) => {
+  const start = (THREE, companions) => {
+    if (!companions.length) {
+      container.remove();
+      return;
+    }
+
     const canvas = document.createElement('canvas');
     canvas.className = 'garden-pets__canvas';
     canvas.setAttribute('aria-hidden', 'true');
@@ -103,50 +113,40 @@
       powerPreference: 'low-power',
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-    renderer.setSize(window.innerWidth, 180, false);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(31, window.innerWidth / 180, 0.1, 80);
-    camera.position.set(0, 1.1, 8.8);
+    const camera = new THREE.PerspectiveCamera(31, window.innerWidth / window.innerHeight, 0.1, 80);
+    camera.position.set(0, 0, 8.8);
     camera.lookAt(0, 0, 0);
 
-    scene.add(new THREE.HemisphereLight(0xc5d9ff, 0x253038, 2.1));
-    const keyLight = new THREE.DirectionalLight(0xffedcf, 2.6);
-    keyLight.position.set(-3, 6, 5);
-    keyLight.castShadow = true;
-    keyLight.shadow.mapSize.set(512, 512);
-    keyLight.shadow.camera.left = -12;
-    keyLight.shadow.camera.right = 12;
-    keyLight.shadow.camera.top = 6;
-    keyLight.shadow.camera.bottom = -4;
-    keyLight.shadow.bias = -0.0005;
-    scene.add(keyLight);
+    const worldHeightAt = (z) => {
+      const distance = camera.position.z - z;
+      return 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * distance;
+    };
+    const worldWidthAt = (z) => worldHeightAt(z) * camera.aspect;
 
-    const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(200, 30),
-      new THREE.ShadowMaterial({ color: 0x18202b, opacity: 0.27 })
-    );
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.y = -1.18;
-    floor.receiveShadow = true;
-    scene.add(floor);
-
-    const models = visitors.map((config, index) => {
+    const models = companions.map((config, index) => {
       const model = createCompanion(THREE, config);
-      const spacing = Math.min(2.1, 12 / visitors.length);
-      const direction = index % 2 === 0 ? 1 : -1;
-      const x = (index - (visitors.length - 1) / 2) * spacing;
-      model.position.set(x, -1.16, -index * 0.12);
+      const z = -index * 0.12;
+      const margin = Math.max(Math.abs(model.scale.x), model.scale.y) / 2 + 0.08;
+      const xBound = Math.max(0.1, worldWidthAt(z) / 2 - margin);
+      const yBound = Math.max(0.1, worldHeightAt(z) / 2 - margin);
+      const x = companions.length === 1
+        ? 0
+        : ((index / (companions.length - 1)) * 2 - 1) * xBound;
+      const y = (Math.random() * 2 - 1) * yBound;
+      const speed = 0.45 + Math.random() * 0.4;
+      model.position.set(x, y, z);
       scene.add(model);
       return {
         model,
         x,
-        z: model.position.z,
-        direction,
-        speed: 0.45 + Math.random() * 0.4,
+        y,
+        z,
+        vx: speed * (Math.random() < 0.5 ? -1 : 1),
+        vy: (0.2 + Math.random() * 0.8) * (Math.random() < 0.5 ? -1 : 1),
         behavior: 'walk',
         nextBehavior: performance.now() + 1800 + Math.random() * 3800,
         phase: Math.random() * Math.PI * 2,
@@ -155,25 +155,26 @@
 
     const pointer = { x: 0, active: false };
     let width = window.innerWidth;
+    let height = window.innerHeight;
     let rafId = 0;
     let previousTime = 0;
     let running = !document.hidden && !reduceMotion.matches;
 
-    const worldWidthAt = (z) => {
-      const distance = camera.position.z - z;
-      const viewHeight = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * distance;
-      return viewHeight * camera.aspect;
-    };
-
     const resize = () => {
       width = window.innerWidth;
+      height = window.innerHeight;
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      renderer.setSize(width, 180, false);
-      camera.aspect = width / 180;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
       models.forEach((pet) => {
-        const bound = worldWidthAt(pet.z) / 2 - 0.55;
-        pet.x = THREE.MathUtils.clamp(pet.x, -bound, bound);
+        const margin = Math.max(Math.abs(pet.model.scale.x), pet.model.scale.y) / 2 + 0.08;
+        const xBound = Math.max(0.1, worldWidthAt(pet.z) / 2 - margin);
+        const yBound = Math.max(0.1, worldHeightAt(pet.z) / 2 - margin);
+        pet.x = THREE.MathUtils.clamp(pet.x, -xBound, xBound);
+        pet.y = THREE.MathUtils.clamp(pet.y, -yBound, yBound);
+        pet.model.position.x = pet.x;
+        pet.model.position.y = pet.y;
       });
       if (!running) renderer.render(scene, camera);
     };
@@ -191,44 +192,39 @@
       previousTime = time;
 
       models.forEach((pet, index) => {
-        const { body, head, footLeft, footRight, armLeft, armRight } = pet.model.userData;
         if (time >= pet.nextBehavior) {
           const roll = Math.random();
           pet.behavior = roll < 0.16 ? 'sleep' : roll < 0.31 ? 'bounce' : 'walk';
-          pet.direction = Math.random() < 0.5 ? -1 : 1;
+          pet.vx = Math.abs(pet.vx) * (Math.random() < 0.5 ? -1 : 1);
           pet.nextBehavior = time + 1800 + Math.random() * 4300;
         }
 
         let flee = 0;
         if (pointer.active && pet.behavior !== 'sleep') {
           const distance = pet.x - pointer.x;
-          if (Math.abs(distance) < 2.4) flee = Math.sign(distance || pet.direction) * (1 - Math.abs(distance) / 2.4);
+          if (Math.abs(distance) < 2.4) flee = Math.sign(distance || pet.vx) * (1 - Math.abs(distance) / 2.4);
         }
 
-        if (pet.behavior === 'walk') {
-          pet.x += (pet.direction * pet.speed + flee * 2.6) * dt;
-        } else if (pet.behavior === 'bounce') {
-          pet.x += (pet.direction * pet.speed * 0.65 + flee * 2.6) * dt;
-        }
+        const movementScale = pet.behavior === 'sleep' ? 0.2 : pet.behavior === 'bounce' ? 0.65 : 1;
+        pet.x += (pet.vx * movementScale + flee * 2.6) * dt;
+        pet.y += pet.vy * movementScale * dt;
 
-        const bound = worldWidthAt(pet.z) / 2 - 0.55;
-        if (pet.x < -bound || pet.x > bound) {
-          pet.x = THREE.MathUtils.clamp(pet.x, -bound, bound);
-          pet.direction *= -1;
+        const margin = Math.max(Math.abs(pet.model.scale.x), pet.model.scale.y) / 2 + 0.08;
+        const xBound = Math.max(0.1, worldWidthAt(pet.z) / 2 - margin);
+        if (pet.x < -xBound || pet.x > xBound) {
+          pet.x = THREE.MathUtils.clamp(pet.x, -xBound, xBound);
+          pet.vx *= -1;
+        }
+        const yBound = Math.max(0.1, worldHeightAt(pet.z) / 2 - margin);
+        if (pet.y < -yBound || pet.y > yBound) {
+          pet.y = THREE.MathUtils.clamp(pet.y, -yBound, yBound);
+          pet.vy *= -1;
         }
         pet.model.position.x = pet.x;
-        pet.model.position.y = -1.16 + Math.sin(time * 0.004 + pet.phase) * (pet.behavior === 'sleep' ? 0.025 : 0.07);
+        pet.model.position.y = pet.y + Math.sin(time * 0.004 + pet.phase) * (pet.behavior === 'sleep' ? 0.025 : 0.07);
         pet.model.position.z = pet.z + Math.sin(time * 0.0015 + index) * 0.12;
-        pet.model.rotation.y = pet.direction < 0 ? Math.PI + 0.12 : 0.12;
+        pet.model.scale.x = Math.abs(pet.model.scale.x) * (pet.vx < 0 ? -1 : 1);
         pet.model.rotation.z = pet.behavior === 'sleep' ? Math.PI / 2 : Math.sin(time * 0.002 + pet.phase) * 0.035;
-
-        const step = Math.sin(time * 0.012 + pet.phase) * (pet.behavior === 'walk' ? 0.45 : 0.06);
-        footLeft.rotation.x = step;
-        footRight.rotation.x = -step;
-        armLeft.rotation.z = -0.4 - step * 0.45;
-        armRight.rotation.z = 0.4 + step * 0.45;
-        body.rotation.z = pet.behavior === 'sleep' ? 0.05 : Math.sin(time * 0.005 + pet.phase) * 0.035;
-        head.rotation.x = pet.behavior === 'bounce' ? Math.sin(time * 0.012) * 0.08 : 0;
       });
 
       renderer.render(scene, camera);
@@ -258,8 +254,8 @@
     else renderer.render(scene, camera);
   };
 
-  loadThree().then(start).catch((error) => {
+  loadThree().then((THREE) => loadTextures(THREE).then((companions) => start(THREE, companions))).catch((error) => {
     container.remove();
-    console.error('The 3D garden companions could not be initialized.', error);
+    console.error('The Pokémon sprites could not be loaded or initialized.', error);
   });
 })();
