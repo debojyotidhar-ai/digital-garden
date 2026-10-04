@@ -373,7 +373,7 @@ a {
   top: 0.35rem;
   bottom: 0.35rem;
   width: var(--bw);
-  background: var(--fg);
+  background: var(--line);
 }
 
 .timeline__item {
@@ -393,7 +393,7 @@ a {
   width: 0.75rem;
   height: 0.75rem;
   background: var(--bg);
-  border: var(--bw) solid var(--fg);
+  border: var(--bw) solid var(--line);
 }
 
 .timeline__when {
@@ -481,17 +481,17 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
   margin-top: clamp(3rem, 7vw, 5rem);
-  border-top: var(--bw) solid var(--fg);
-  border-left: var(--bw) solid var(--fg);
+  border-top: var(--bw) solid var(--line);
+  border-left: var(--bw) solid var(--line);
 }
 
 .focus__cell {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  padding: 1.25rem;
-  border-right: var(--bw) solid var(--fg);
-  border-bottom: var(--bw) solid var(--fg);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-right: var(--bw) solid var(--line);
+  border-bottom: var(--bw) solid var(--line);
 }
 
 .focus dt {

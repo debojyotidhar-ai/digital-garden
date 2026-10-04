@@ -34,6 +34,7 @@
 </head>
 
 <body id="top">
+  <canvas id="bg-canvas"></canvas>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -58,40 +59,49 @@
 
   <main id="main">
 
-    <section class="page-head" aria-labelledby="page-title">
+    <section class="hero" aria-labelledby="page-title">
       <div class="wrap">
-        <p class="eyebrow" data-reveal>/about</p>
-        <h1 id="page-title" class="page-head__title" data-reveal>Learning. Building. Experimenting.</h1>
-        <p class="page-head__lede" data-reveal>A young builder exploring AI, technology &amp; entrepreneurship.</p>
+        <p class="eyebrow" data-reveal>Debojyoti Dhar <span aria-hidden="true">/</span> About</p>
+        <h1 id="page-title" class="hero__title" data-reveal>Learning. Building. Experimenting.</h1>
+        <p class="hero__lede" data-reveal>A young builder exploring AI, technology &amp; entrepreneurship.</p>
+        <p class="eyebrow" data-reveal>First-year AI &amp; Business student · Scaler School of Technology · Class of 2030</p>
       </div>
     </section>
 
     <section id="journey" class="section" aria-labelledby="journey-title">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <span class="section__idx">&rarr;</span>
+          <span class="section__idx">01</span>
           <h2 id="journey-title" class="section__title">The journey</h2>
-          <span class="section__meta">3 marks</span>
+          <span class="section__meta">A foundation in progress</span>
         </header>
 
         <ol class="timeline">
           <li class="timeline__item" data-reveal>
-            <p class="timeline__when">Class 10 · CBSE</p>
-            <h3 class="timeline__title">95.4%</h3>
-            <p class="timeline__body">Techno India Group Public School. The first time the work was measured in public,
-              and the first time I treated a long exam cycle like a system: schedule, recover, iterate.</p>
+            <article>
+              <p class="timeline__when">2024 · Class 10</p>
+              <h3 class="timeline__title">A strong start: 95.4%</h3>
+              <p class="timeline__body">At Techno India Group Public School, I built a strong foundation in Mathematics
+                and English. Those subjects taught me to look for structure, work carefully through a problem, and
+                communicate an idea clearly.</p>
+            </article>
           </li>
           <li class="timeline__item" data-reveal>
-            <p class="timeline__when">Class 12 · CBSE · 2026</p>
-            <h3 class="timeline__title">89% <span class="timeline__note">(best-five, after re-evaluation)</span></h3>
-            <p class="timeline__body">Not the number I wanted on the first pass. I filed for re-evaluation, waited, and
-              took the corrected result. Early lesson: process matters as much as the first output.</p>
+            <article>
+              <p class="timeline__when">2026 · Class 12</p>
+              <h3 class="timeline__title">89% <span class="timeline__note">best-five aggregate</span></h3>
+              <p class="timeline__body">Finishing school marked the end of one structured chapter and the beginning of
+                a more open-ended one: choosing what to learn next, and making time to put that learning into practice.</p>
+            </article>
           </li>
           <li class="timeline__item" data-reveal>
-            <p class="timeline__when">Now · 2026–2030</p>
-            <h3 class="timeline__title">Scaler School of Technology</h3>
-            <p class="timeline__body">Joined the AI &amp; Business cohort. First year. Exploring the intersection of
-              software and business — how a system is built, and how it actually gets used.</p>
+            <article>
+              <p class="timeline__when">Present · 2026–2030</p>
+              <h3 class="timeline__title">Scaler School of Technology</h3>
+              <p class="timeline__body">I joined the AI &amp; Business cohort to understand more than how technology
+                works in isolation. I want to see how raw technology becomes a useful product: one that fits real
+                needs, respects its constraints, and solves a problem people actually have.</p>
+            </article>
           </li>
         </ol>
       </div>
@@ -100,20 +110,26 @@
     <section id="philosophy" class="section" aria-labelledby="philosophy-title">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <span class="section__idx">&rarr;</span>
+          <span class="section__idx">02</span>
           <h2 id="philosophy-title" class="section__title">The philosophy</h2>
+          <span class="section__meta">Technology, in context</span>
         </header>
 
         <div class="editorial" data-reveal>
-          <p class="editorial__lead">I chose an AI &amp; Business program over a traditional computer-science degree
-            on purpose.</p>
-          <p>I care about how software is made — the DOM, the main thread, the data model — but I do not want that to
-            be the whole picture. A system that is elegant in isolation and useless in a hospital, a shop, or a
-            classroom is still a failed system. I want to understand how technology becomes a useful product that
-            solves real problems.</p>
-          <p>That means sitting with both sides of the work: writing the interface, and asking who has to click it
-            at 2 a.m. It means treating business constraints as part of the design, not as a layer you add later.
-            I am early. The point of this site is to keep a public record of that learning, without inflating it.</p>
+          <p class="editorial__lead">I am interested in the space between what technology can do and what is genuinely
+            useful to someone.</p>
+          <p>That curiosity brings together three areas I keep returning to: artificial intelligence, software
+            engineering, and startup building. AI can make new kinds of tools possible, but the model is only one part
+            of the work. There is also the data, the interface, the system around it, and the question of whether it
+            helps with a real need.</p>
+          <p>Software engineering gives me a way to explore those details. I enjoy learning how a page responds to an
+            interaction, how information moves through a program, and how small implementation choices affect the
+            experience. I want to understand fundamentals well enough to make things that are clear, dependable, and
+            honest about their trade-offs.</p>
+          <p>Startup building adds another useful perspective: begin with a problem, pay attention to the people living
+            with it, and test whether an idea holds up outside a notebook. I chose an AI &amp; Business education
+            because I want to study both the technology and the decisions that help it become a product. I am at the
+            beginning of that work, and I am building in public to keep a record of what I learn along the way.</p>
         </div>
       </div>
     </section>
@@ -121,22 +137,36 @@
     <section id="interests" class="section" aria-labelledby="interests-title">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <span class="section__idx">&rarr;</span>
-          <h2 id="interests-title" class="section__title">Interests &amp; lifestyle</h2>
+          <span class="section__idx">03</span>
+          <h2 id="interests-title" class="section__title">Interests &amp; discipline</h2>
+          <span class="section__meta">On screen / off screen</span>
         </header>
 
         <dl class="focus">
           <div class="focus__cell" data-reveal>
-            <dt>Work adjacent</dt>
-            <dd>AI data annotation</dd>
-            <dd class="focus__note">Labeling and evaluating data is unglamorous and exacting. It is also how models
-              actually get better — and a useful way to see where systems fail in the wild.</dd>
+            <dt>01 / Foundations</dt>
+            <dd>Data Structures</dd>
+            <dd class="focus__note">Learning to represent information well and reason about the choices behind
+              efficient solutions.</dd>
           </div>
           <div class="focus__cell" data-reveal>
-            <dt>Discipline</dt>
-            <dd>Fitness</dd>
-            <dd class="focus__note">Cycling, daily bodyweight routines, and forearm training. Same idea as the
-              coursework: small, repeatable sessions beat occasional heroics.</dd>
+            <dt>02 / The web</dt>
+            <dd>HTML, CSS &amp; JavaScript</dd>
+            <dd class="focus__note">Building a practical understanding of the browser, from semantic structure and
+              layout to interaction and the DOM.</dd>
+          </div>
+          <div class="focus__cell" data-reveal>
+            <dt>03 / Programming</dt>
+            <dd>Python</dd>
+            <dd class="focus__note">Developing fluency with the language while exploring the ideas and tools behind
+              software and AI.</dd>
+          </div>
+          <div class="focus__cell" data-reveal>
+            <dt>04 / Daily practice</dt>
+            <dd>Training &amp; consistency</dd>
+            <dd class="focus__note">Bodyweight and ab workouts, forearm training, and cycling keep movement in my
+              routine. I also avoid refined sugar. Small habits are a way to practise showing up, even when progress
+              is gradual.</dd>
           </div>
         </dl>
       </div>
@@ -151,6 +181,7 @@
       <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
+  <script src="../js/background.js"></script>
 </body>
 
 </html>
