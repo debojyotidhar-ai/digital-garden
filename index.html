@@ -34,6 +34,7 @@
 </head>
 
 <body id="top">
+  <canvas id="bg-canvas"></canvas>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -44,8 +45,9 @@
       <nav class="site-nav" aria-label="Primary">
         <ul>
           <li><a href="./" aria-current="page"><span class="idx">01</span>Home</a></li>
-          <li><a href="projects/"><span class="idx">02</span>Projects</a></li>
-          <li><a href="blog/"><span class="idx">03</span>Blog</a></li>
+          <li><a href="about/"><span class="idx">02</span>About</a></li>
+          <li><a href="projects/"><span class="idx">03</span>Projects</a></li>
+          <li><a href="blog/"><span class="idx">04</span>Blog</a></li>
         </ul>
       </nav>
 
@@ -60,8 +62,8 @@
     <!-- HERO / MANIFESTO -->
     <section id="manifesto" class="hero" aria-labelledby="hero-title">
       <div class="wrap">
-        <p class="eyebrow" data-reveal>Debojyoti Dhar &mdash; First-year CS undergrad at Scaler School of Technology (Class of
-          2030).</p>
+        <p class="eyebrow" data-reveal>Debojyoti Dhar &mdash; First-year AI &amp; Business student at Scaler School of
+          Technology (Class of 2030).</p>
         <h1 id="hero-title" class="hero__title" data-reveal>I build systems that are fast, legible, and honest about their
           trade-offs.</h1>
         <p class="hero__lede" data-reveal>
@@ -104,17 +106,30 @@
         <header class="section__head" data-reveal>
           <span class="section__idx">&rarr;</span>
           <h2 id="explore-title" class="section__title">Explore</h2>
-          <span class="section__meta">2 sections</span>
+          <span class="section__meta">3 sections</span>
         </header>
 
         <div class="grid">
           <article class="card" data-reveal>
+            <p class="card__kicker">/about</p>
+            <h3 class="card__title">About</h3>
+            <p class="card__desc">The path so far: school marks, joining Scaler&rsquo;s AI &amp; Business cohort, and
+              why I care about products as much as programs.</p>
+            <ul class="tags" aria-label="Contents">
+              <li>Journey</li>
+              <li>Philosophy</li>
+            </ul>
+            <a class="card__link" href="about/">Read about me<span class="vh"> page</span> <span
+                aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card" data-reveal>
             <p class="card__kicker">/projects</p>
             <h3 class="card__title">Projects</h3>
-            <p class="card__desc">A zero-dependency portfolio and a hackathon form-automation extension &mdash; the
-              things I have shipped so far.</p>
+            <p class="card__desc">A zero-dependency portfolio, a hackathon form-automation extension, and early product
+              testing on a hospital management system.</p>
             <ul class="tags" aria-label="Contents">
-              <li>2 projects</li>
+              <li>3 projects</li>
               <li>HTML</li>
               <li>JavaScript</li>
             </ul>
@@ -148,6 +163,7 @@
       <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
+  <script src="js/background.js"></script>
 </body>
 
 </html>

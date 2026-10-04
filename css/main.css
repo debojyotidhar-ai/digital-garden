@@ -96,6 +96,18 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  isolation: isolate; /* keep #bg-canvas (z-index: -1) above the body fill */
+}
+
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 h1, h2, h3, p, ul, ol, dl, dd {
@@ -239,6 +251,16 @@ a {
   gap: 0.25rem 1.25rem;
 }
 
+@media (max-width: 40rem) {
+  .site-nav ul {
+    gap: 0.15rem 0.75rem;
+  }
+
+  .site-nav a {
+    font-size: 0.75rem;
+  }
+}
+
 .site-nav a {
   display: inline-block;
   padding-block: 0.25rem;
@@ -306,6 +328,99 @@ a {
   max-width: var(--measure);
   margin-top: clamp(1rem, 2vw, 1.5rem);
   font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   About — editorial type + vertical timeline
+   -------------------------------------------------------------------------- */
+.editorial {
+  max-width: var(--measure);
+}
+
+.editorial p {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.editorial p + p {
+  margin-top: 1.25rem;
+}
+
+.editorial__lead {
+  color: var(--fg);
+  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.625rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.timeline {
+  position: relative;
+  max-width: 42rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: var(--bw);
+  background: var(--fg);
+}
+
+.timeline__item {
+  position: relative;
+  padding: 0 0 clamp(2rem, 5vw, 3.25rem) 2.25rem;
+}
+
+.timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--bg);
+  border: var(--bw) solid var(--fg);
+}
+
+.timeline__when {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.timeline__title {
+  margin-top: 0.4rem;
+  font-size: clamp(1.25rem, 1rem + 0.6vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.timeline__note {
+  font-weight: 500;
+  font-size: 0.75em;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.timeline__body {
+  margin-top: 0.55rem;
   color: var(--muted);
   text-wrap: pretty;
 }
