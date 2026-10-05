@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visual Log — Debojyoti Dhar</title>
+  <meta name="description" content="A visual log of family, friends, and moments worth remembering.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0b0a" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Visual Log — Debojyoti Dhar">
+  <meta property="og:description" content="A visual log of family, friends, and moments worth remembering.">
+
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0a'/%3E%3Crect x='8' y='8' width='16' height='16' fill='%23ff8a5c'/%3E%3C/svg%3E">
+
+  <script>
+    var h = document.documentElement;
+    h.classList.add('js');
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') h.classList.add('theme-' + t);
+    } catch (e) { }
+  </script>
+
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/main.js" defer></script>
+</head>
+
+<body id="top">
+  <canvas id="bg-canvas"></canvas>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="brand" href="./" aria-label="Debojyoti Dhar — home">dd<span class="brand__cursor"
+          aria-hidden="true">_</span></a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="./"><span class="idx">01</span>Home</a></li>
+          <li><a href="about/"><span class="idx">02</span>About</a></li>
+          <li><a href="projects/"><span class="idx">03</span>Projects</a></li>
+          <li><a href="blog/"><span class="idx">04</span>Blog</a></li>
+          <li><a href="brain/"><span class="idx">05</span>Brain</a></li>
+          <li><a href="gallery.html" aria-current="page"><span class="idx">06</span>Gallery</a></li>
+        </ul>
+      </nav>
+
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+        <span aria-hidden="true">◐</span> <span id="theme-toggle-label">dark</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head visual-head" aria-labelledby="page-title">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal>/visual-log &mdash; fragments of a life</p>
+        <h1 id="page-title" class="page-head__title" data-reveal>Visual Log<span class="visual-head__period">.</span></h1>
+        <p class="page-head__lede" data-reveal>A collection of people, places, and little moments that stay with me.</p>
+      </div>
+    </section>
+
+    <section class="section visual-section" aria-labelledby="gallery-title">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <span class="section__idx">01</span>
+          <h2 id="gallery-title" class="section__title">Collected moments</h2>
+          <span class="section__meta">A life, in frames</span>
+        </header>
+
+        <div class="visual-filters" role="group" aria-label="Filter images by category">
+          <button class="filter-btn is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-btn" type="button" data-filter="family" aria-pressed="false">Family</button>
+          <button class="filter-btn" type="button" data-filter="friends" aria-pressed="false">Friends</button>
+          <button class="filter-btn" type="button" data-filter="events" aria-pressed="false">Events</button>
+        </div>
+
+        <div class="visual-grid">
+          <article class="visual-card" data-category="family">
+            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="Family spending time together outdoors" loading="lazy" decoding="async">
+            <div class="visual-card__caption">
+              <p class="visual-card__category">Family <span>01</span></p>
+              <h3>Where it begins</h3>
+            </div>
+          </article>
+          <article class="visual-card" data-category="family">
+            <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="A quiet cabin surrounded by trees" loading="lazy" decoding="async">
+            <div class="visual-card__caption">
+              <p class="visual-card__category">Family <span>02</span></p>
+              <h3>Time, unhurried</h3>
+            </div>
+          </article>
+          <article class="visual-card" data-category="friends">
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="Friends gathered outdoors, sharing a moment" loading="lazy" decoding="async">
+            <div class="visual-card__caption">
+              <p class="visual-card__category">Friends <span>01</span></p>
+              <h3>The good company</h3>
+            </div>
+          </article>
+          <article class="visual-card" data-category="friends">
+            <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="Friends celebrating together" loading="lazy" decoding="async">
+            <div class="visual-card__caption">
+              <p class="visual-card__category">Friends <span>02</span></p>
+              <h3>One for the stories</h3>
+            </div>
+          </article>
+          <article class="visual-card" data-category="events">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="A crowd enjoying a live event under colorful lights" loading="lazy" decoding="async">
+            <div class="visual-card__caption">
+              <p class="visual-card__category">Events <span>01</span></p>
+              <h3>All here, all at once</h3>
+            </div>
+          </article>
+          <article class="visual-card" data-category="events">
+            <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="A concert crowd raising their hands" loading="lazy" decoding="async">
+            <div class="visual-card__caption">
+              <p class="visual-card__category">Events <span>02</span></p>
+              <h3>A night to remember</h3>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap site-footer__inner">
+      <p>&copy; 2026 Debojyoti Dhar</p>
+      <p>Zero dependencies. HTML, CSS, JS.</p>
+      <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </footer>
+  <script>
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const galleryCards = document.querySelectorAll('.visual-card[data-category]');
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const category = button.dataset.filter;
+
+        filterButtons.forEach((filter) => {
+          const isActive = filter === button;
+          filter.classList.toggle('is-active', isActive);
+          filter.setAttribute('aria-pressed', String(isActive));
+        });
+
+        galleryCards.forEach((card) => {
+          card.hidden = category !== 'all' && card.dataset.category !== category;
+        });
+      });
+    });
+  </script>
+  <script src="js/background.js"></script>
+  <script src="js/pets.js"></script>
+</body>
+
+</html>

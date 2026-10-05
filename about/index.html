@@ -31,6 +31,7 @@
 
   <link rel="stylesheet" href="../css/main.css">
   <script src="../js/main.js" defer></script>
+  <script src="../js/gallery.js" defer></script>
 </head>
 
 <body id="top">
@@ -49,6 +50,7 @@
           <li><a href="../projects/"><span class="idx">03</span>Projects</a></li>
           <li><a href="../blog/"><span class="idx">04</span>Blog</a></li>
           <li><a href="../brain/"><span class="idx">05</span>Brain</a></li>
+          <li><a href="../gallery.html"><span class="idx">06</span>Gallery</a></li>
         </ul>
       </nav>
 
@@ -170,6 +172,86 @@
               is gradual.</dd>
           </div>
         </dl>
+      </div>
+    </section>
+
+    <section id="gallery" class="section" aria-labelledby="gallery-title">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <span class="section__idx">04</span>
+          <h2 id="gallery-title" class="section__title">Field notes</h2>
+          <span class="section__meta">Places, people &amp; the work</span>
+        </header>
+
+        <div id="gallery-filters" class="gallery-filters" role="group" aria-label="Filter gallery by category">
+          <button class="gallery-filter" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="gallery-filter" type="button" data-filter="Basecamp" aria-pressed="false">Basecamp</button>
+          <button class="gallery-filter" type="button" data-filter="The Network" aria-pressed="false">The Network</button>
+          <button class="gallery-filter" type="button" data-filter="Execution" aria-pressed="false">Execution</button>
+        </div>
+
+        <div id="gallery-grid" class="gallery-grid">
+          <article class="gallery-card" data-category="Basecamp" tabindex="0">
+            <img
+              src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="Mountain lake and forest beneath a clear sky" loading="lazy" decoding="async">
+            <div class="gallery-card__description">
+              <p class="gallery-card__category">Basecamp</p>
+              <h3>Room to think</h3>
+              <p>Stepping back, finding perspective, and deciding what is worth building next.</p>
+            </div>
+          </article>
+          <article class="gallery-card" data-category="Basecamp" tabindex="0">
+            <img
+              src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="Sunlit landscape with a winding trail through the hills" loading="lazy" decoding="async">
+            <div class="gallery-card__description">
+              <p class="gallery-card__category">Basecamp</p>
+              <h3>Start with the ground</h3>
+              <p>Good work begins with curiosity, strong foundations, and a clear sense of direction.</p>
+            </div>
+          </article>
+          <article class="gallery-card" data-category="The Network" tabindex="0">
+            <img
+              src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="A team gathered around a table sharing ideas" loading="lazy" decoding="async">
+            <div class="gallery-card__description">
+              <p class="gallery-card__category">The Network</p>
+              <h3>Better together</h3>
+              <p>Ideas get sharper when they are shared, questioned, and shaped with other people.</p>
+            </div>
+          </article>
+          <article class="gallery-card" data-category="The Network" tabindex="0">
+            <img
+              src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="Collaborators working together around a laptop" loading="lazy" decoding="async">
+            <div class="gallery-card__description">
+              <p class="gallery-card__category">The Network</p>
+              <h3>Learn in public</h3>
+              <p>Build in the open, trade perspectives, and stay connected to the people behind the work.</p>
+            </div>
+          </article>
+          <article class="gallery-card" data-category="Execution" tabindex="0">
+            <img
+              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="A laptop displaying code on a developer's desk" loading="lazy" decoding="async">
+            <div class="gallery-card__description">
+              <p class="gallery-card__category">Execution</p>
+              <h3>Make it work</h3>
+              <p>Turn a small, testable idea into something useful, one careful iteration at a time.</p>
+            </div>
+          </article>
+          <article class="gallery-card" data-category="Execution" tabindex="0">
+            <img
+              src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt="A person working on a laptop at a desk" loading="lazy" decoding="async">
+            <div class="gallery-card__description">
+              <p class="gallery-card__category">Execution</p>
+              <h3>Keep moving</h3>
+              <p>Progress comes from showing up, testing assumptions, and improving what is already there.</p>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 

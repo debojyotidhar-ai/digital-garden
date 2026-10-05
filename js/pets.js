@@ -1,6 +1,8 @@
-/* pets.js — roaming Pokémon sprites, rendered with Three.js. */
+/* pets.js — a DOM spider hunts roaming Pokémon rendered with Three.js. */
 (() => {
   'use strict';
+
+  const isMobile = window.innerWidth < 768;
 
   if (document.querySelector('.garden-pets')) return;
 
@@ -52,17 +54,21 @@
       size: 0.92,
     },
   ];
+  const visitorsToLoad = isMobile ? visitors.slice(0, 3) : visitors;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const container = document.createElement('div');
   container.className = 'garden-pets';
   container.setAttribute('aria-hidden', 'true');
+  const spider = document.createElement('div');
+  spider.className = 'garden-pets__spider';
+  container.append(spider);
   document.body.append(container);
 
   const loadThree = () => import(CDN_URL);
 
   const loadTextures = (THREE) => {
     const loader = new THREE.TextureLoader();
-    return Promise.all(visitors.map(async (config) => {
+    return Promise.all(visitorsToLoad.map(async (config) => {
       try {
         const texture = await loader.loadAsync(config.texture);
         return { ...config, texture };
@@ -85,7 +91,8 @@
       depthWrite: false,
     });
     const sprite = new THREE.Sprite(material);
-    sprite.scale.set(1.15 * config.size, 1.5 * config.size, 1);
+    const scale = isMobile ? 0.5 : 1;
+    sprite.scale.set(1.15 * config.size * scale, 1.5 * config.size * scale, 1);
     return sprite;
   };
 
@@ -98,7 +105,7 @@
     const canvas = document.createElement('canvas');
     canvas.className = 'garden-pets__canvas';
     canvas.setAttribute('aria-hidden', 'true');
-    container.replaceChildren(canvas);
+    container.prepend(canvas);
 
     if (!THREE.WebGLRenderer) {
       console.error('Three.js loaded, but WebGLRenderer is unavailable.');
@@ -112,6 +119,7 @@
       antialias: true,
       powerPreference: 'low-power',
     });
+    renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -153,7 +161,22 @@
       };
     });
 
-    const pointer = { x: 0, active: false };
+    let spiderX = window.innerWidth / 2;
+    let spiderY = window.innerHeight / 2;
+    let hunterTarget = models[Math.floor(Math.random() * models.length)];
+    let targetChangedAt = performance.now();
+    let nextRetargetTime = targetChangedAt + 1000;
+    const hunterLerp = 0.015;
+    const greatestWorldSpan = models.reduce(
+      (span, pet) => Math.max(span, worldWidthAt(pet.z), worldHeightAt(pet.z)),
+      0
+    );
+    const escapeSpeed = Math.max(5.5, greatestWorldSpan * hunterLerp * 60 * 1.25);
+    const dangerRadius = 2.4;
+    spider.style.left = `${spiderX}px`;
+    spider.style.top = `${spiderY}px`;
+
+    const pointer = { ndcX: 0, ndcY: 0, active: false };
     let width = window.innerWidth;
     let height = window.innerHeight;
     let rafId = 0;
@@ -167,6 +190,8 @@
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
+      spiderX = THREE.MathUtils.clamp(spiderX, 0, width);
+      spiderY = THREE.MathUtils.clamp(spiderY, 0, height);
       models.forEach((pet) => {
         const margin = Math.max(Math.abs(pet.model.scale.x), pet.model.scale.y) / 2 + 0.08;
         const xBound = Math.max(0.1, worldWidthAt(pet.z) / 2 - margin);
@@ -179,8 +204,51 @@
       if (!running) renderer.render(scene, camera);
     };
 
+    const projectPet = (pet) => {
+      const position = pet.model.position.clone().project(camera);
+      return {
+        x: (position.x * 0.5 + 0.5) * width,
+        y: (-position.y * 0.5 + 0.5) * height,
+      };
+    };
+
+    const chooseHunterTarget = (time) => {
+      const alternatives = models.length > 1
+        ? models.filter((pet) => pet !== hunterTarget)
+        : models;
+      hunterTarget = alternatives[Math.floor(Math.random() * alternatives.length)];
+      targetChangedAt = time;
+      nextRetargetTime = time + 1000;
+    };
+
+    const updateHunter = (time, dt) => {
+      if (!hunterTarget) return;
+
+      spider.classList.add('is-active');
+      const target = projectPet(hunterTarget);
+      const dx = target.x - spiderX;
+      const dy = target.y - spiderY;
+      const distance = Math.hypot(dx, dy);
+      const chaseRadius = Math.max(width, height) * 0.7;
+      const escaped = time >= nextRetargetTime && distance > chaseRadius;
+
+      if (time - targetChangedAt >= 5000 || escaped) {
+        chooseHunterTarget(time);
+        return;
+      }
+
+      const chaseFactor = 1 - Math.pow(1 - hunterLerp, dt * 60);
+      spiderX += dx * chaseFactor;
+      spiderY += dy * chaseFactor;
+      spider.style.left = `${spiderX}px`;
+      spider.style.top = `${spiderY}px`;
+      spider.style.transform =
+        `translate(-50%, -50%) rotate(${Math.atan2(dy, dx) * (180 / Math.PI) + 90}deg)`;
+    };
+
     const onPointerMove = (event) => {
-      pointer.x = (event.clientX / Math.max(width, 1) - 0.5) * worldWidthAt(0);
+      pointer.ndcX = (event.clientX / Math.max(width, 1)) * 2 - 1;
+      pointer.ndcY = 1 - (event.clientY / Math.max(height, 1)) * 2;
       pointer.active = true;
     };
     const clearPointer = () => { pointer.active = false; };
@@ -192,16 +260,47 @@
       previousTime = time;
 
       models.forEach((pet, index) => {
-        if (time >= pet.nextBehavior) {
+        if (pet.behavior !== 'flee' && time >= pet.nextBehavior) {
           const roll = Math.random();
           pet.behavior = roll < 0.16 ? 'sleep' : roll < 0.31 ? 'bounce' : 'walk';
           pet.vx = Math.abs(pet.vx) * (Math.random() < 0.5 ? -1 : 1);
           pet.nextBehavior = time + 1800 + Math.random() * 4300;
         }
 
+        const margin = Math.max(Math.abs(pet.model.scale.x), pet.model.scale.y) / 2 + 0.08;
+        const xBound = Math.max(0.1, worldWidthAt(pet.z) / 2 - margin);
+        const yBound = Math.max(0.1, worldHeightAt(pet.z) / 2 - margin);
+        const spiderNdcX = (spiderX / Math.max(width, 1)) * 2 - 1;
+        const spiderNdcY = 1 - (spiderY / Math.max(height, 1)) * 2;
+        const hunterX = spiderNdcX * worldWidthAt(pet.model.position.z) / 2;
+        const hunterY = spiderNdcY * worldHeightAt(pet.model.position.z) / 2;
+        const awayX = pet.x - hunterX;
+        const awayY = pet.y - hunterY;
+        const hunterDistance = Math.hypot(awayX, awayY);
+
+        if (hunterDistance < dangerRadius) {
+          let escapeX = hunterDistance > 0.001 ? awayX / hunterDistance : (pet.vx < 0 ? 1 : -1);
+          let escapeY = hunterDistance > 0.001 ? awayY / hunterDistance : 0;
+          if (pet.x > xBound * 0.82 && escapeX > 0) escapeX = -Math.abs(escapeX);
+          if (pet.x < -xBound * 0.82 && escapeX < 0) escapeX = Math.abs(escapeX);
+          if (pet.y > yBound * 0.82 && escapeY > 0) escapeY = -Math.abs(escapeY);
+          if (pet.y < -yBound * 0.82 && escapeY < 0) escapeY = Math.abs(escapeY);
+          const escapeLength = Math.hypot(escapeX, escapeY) || 1;
+          pet.vx = escapeX / escapeLength * escapeSpeed;
+          pet.vy = escapeY / escapeLength * escapeSpeed;
+          pet.behavior = 'flee';
+          pet.nextBehavior = time + 500;
+        } else if (pet.behavior === 'flee') {
+          const speed = 0.45 + Math.random() * 0.4;
+          pet.vx = speed * (Math.random() < 0.5 ? -1 : 1);
+          pet.vy = (0.2 + Math.random() * 0.8) * (Math.random() < 0.5 ? -1 : 1);
+          pet.behavior = 'walk';
+        }
+
         let flee = 0;
-        if (pointer.active && pet.behavior !== 'sleep') {
-          const distance = pet.x - pointer.x;
+        if (pointer.active && pet.behavior !== 'sleep' && pet.behavior !== 'flee') {
+          const pointerX = pointer.ndcX * worldWidthAt(0) / 2;
+          const distance = pet.x - pointerX;
           if (Math.abs(distance) < 2.4) flee = Math.sign(distance || pet.vx) * (1 - Math.abs(distance) / 2.4);
         }
 
@@ -209,13 +308,10 @@
         pet.x += (pet.vx * movementScale + flee * 2.6) * dt;
         pet.y += pet.vy * movementScale * dt;
 
-        const margin = Math.max(Math.abs(pet.model.scale.x), pet.model.scale.y) / 2 + 0.08;
-        const xBound = Math.max(0.1, worldWidthAt(pet.z) / 2 - margin);
         if (pet.x < -xBound || pet.x > xBound) {
           pet.x = THREE.MathUtils.clamp(pet.x, -xBound, xBound);
           pet.vx *= -1;
         }
-        const yBound = Math.max(0.1, worldHeightAt(pet.z) / 2 - margin);
         if (pet.y < -yBound || pet.y > yBound) {
           pet.y = THREE.MathUtils.clamp(pet.y, -yBound, yBound);
           pet.vy *= -1;
@@ -227,6 +323,7 @@
         pet.model.rotation.z = pet.behavior === 'sleep' ? Math.PI / 2 : Math.sin(time * 0.002 + pet.phase) * 0.035;
       });
 
+      updateHunter(time, dt);
       renderer.render(scene, camera);
       rafId = requestAnimationFrame(animate);
     };
@@ -240,6 +337,7 @@
     };
     const play = () => {
       running = !document.hidden && !reduceMotion.matches;
+      spider.classList.toggle('is-active', running);
       previousTime = 0;
       if (running && !rafId) rafId = requestAnimationFrame(animate);
       else renderer.render(scene, camera);
